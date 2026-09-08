@@ -65,30 +65,8 @@ pip install -r requirements.txt
 
 ---
 
-## Netstrike Mobile (Aplicacion Android)
+## Modos de Uso
 
-Adicionalmente a la version CLI de escritorio, el proyecto incluye **Netstrike Mobile**, una aplicacion nativa para Android desarrollada en Kotlin y Jetpack Compose con diseno tactico oscuro.
-
-### Caracteristicas de la App Movil:
-* **Ejecucion 100% autonoma**: No requiere tener una computadora encendida ni emuladores como Termux.
-* **Descubrimiento Wi-Fi Integrado**: Escaneo de paquetes SSDP/UPnP Multicast directo desde el adaptador de red del telefono.
-* **Inyeccion Instantanea de YouTube**: Soporte completo para reproduccion en frio (lanzamiento de app) y en caliente (sincronizacion via YouTube Lounge API).
-* **Proyeccion forzada de Netflix**: Envio de identificadores de titulos directamente al servidor DIAL de la pantalla.
-* **Comandos de Control Remoto**: Encendido HDMI-CEC, terminacion forzada de aplicaciones y consulta de estado en tiempo real.
-* **Consola de Telemetria en Vivo**: Registro de eventos de red y respuestas HTTP de los dispositivos en pantalla.
-
-### Instalacion en el Telefono:
-El paquete compilado se encuentra disponible en la raiz del repositorio:
-* Archivo: `Netstrike-Mobile.apk`
-
-Para instalarlo:
-1. Transferir o descargar el archivo `Netstrike-Mobile.apk` al dispositivo Android.
-2. Permitir la instalacion desde fuentes desconocidas si el sistema lo solicita.
-3. Asegurarse de que el telefono este conectado a la misma red Wi-Fi que los televisores objetivo y abrir la aplicacion.
-
----
-
-## Modos de Uso (CLI de Escritorio)
 
 ### 1. Modo Interactivo (Consola Táctica)
 

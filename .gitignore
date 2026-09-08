@@ -38,10 +38,3 @@ ENV/
 .idea/
 *.swp
 *.swo
-
-# Android & Gradle
-.gradle/
-**/build/
-local.properties
-*.iml
-
