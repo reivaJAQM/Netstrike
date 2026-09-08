@@ -82,14 +82,7 @@ def normalize_app_name(name: str) -> str:
     mapping = {
         "youtube": "YouTube",
         "netflix": "Netflix",
-        "primevideo": "PrimeVideo",
-        "prime video": "PrimeVideo",
-        "amazon": "PrimeVideo",
-        "spotify": "Spotify",
-        "plex": "Plex",
-        "disney": "DisneyPlus",
-        "disney+": "DisneyPlus",
-        "disneyplus": "DisneyPlus"
+        "plex": "Plex"
     }
     return mapping.get(name.strip().lower(), name.strip())
 
@@ -168,21 +161,9 @@ def extract_netflix_id(url_or_id: str) -> Optional[str]:
 DIAL_AUDIT_APPS = [
     ("YouTube", ["YouTube", "YouTubeTV"]),
     ("Netflix", ["Netflix"]),
-    ("Prime Video", ["PrimeVideo", "AmazonVideo", "AmazonInstantVideo"]),
-    ("Navegador Silk", ["com.amazon.cloud9", "Silk"]),
+    ("Navegador Web / Silk", ["com.amazon.cloud9", "Silk"]),
     ("Servicio Sistema", ["system"]),
-    ("Spotify", ["Spotify", "spotify"]),
-    ("Disney+", ["DisneyPlus", "Disney+"]),
-    ("Max / HBO", ["Max", "HBOMax", "HBO"]),
-    ("Twitch", ["Twitch"]),
-    ("Plex", ["Plex"]),
-    ("Tubi", ["Tubi", "TubiTV"]),
-    ("Pluto TV", ["PlutoTV", "Pluto_TV"]),
-    ("Hulu", ["Hulu", "HuluPlus"]),
-    ("Apple TV", ["AppleTV"]),
-    ("Paramount+", ["ParamountPlus"]),
-    ("Crunchyroll", ["Crunchyroll"]),
-    ("Vudu", ["Vudu"])
+    ("Plex", ["Plex"])
 ]
 
 def is_google_cast_device(ip: str, timeout: float = 1.0) -> bool:
@@ -1083,13 +1064,6 @@ class SmartTVRemote:
 # ==============================================================================
 # MENÚ INTERACTIVO
 # ==============================================================================
-APPS_PREDETERMINADAS = [
-    ("YouTube", "YouTube"),
-    ("Netflix", "Netflix"),
-    ("Prime Video", "PrimeVideo"),
-    ("Spotify", "Spotify"),
-    ("Plex", "Plex")
-]
 
 def limpiar_pantalla():
     """Limpia la pantalla de la consola para mantener una interfaz fija y limpia."""
@@ -1209,19 +1183,17 @@ def menu_interactivo(remote: SmartTVRemote):
         print(f"{Style.CYAN}{'─'*52}{Style.RESET}")
         if remote.is_cast:
             print(f"  {Style.BOLD}[1]{Style.RESET} Encender TV")
-            print(f"  {Style.BOLD}[2]{Style.RESET} YouTube (URL, ID o Enter para solo abrir app)")
-            print(f"  {Style.BOLD}[3]{Style.RESET} Netflix (URL, ID de película/serie o Enter)")
-            print(f"  {Style.BOLD}[4]{Style.RESET} Prime Video")
-            print(f"  {Style.BOLD}[5]{Style.RESET} Otra App (Spotify, Plex, Personalizada...)")
-            print(f"  {Style.BOLD}[6]{Style.RESET} Consultar estado detallado de una app")
-            print(f"  {Style.BOLD}[7]{Style.RESET} Cerrar / Abortar app activa")
-            print(f"  {Style.BOLD}[8]{Style.RESET} Control de Volumen (+ / - / Silencio)")
-            print(f"  {Style.BOLD}[9]{Style.RESET} Controles Multimedia (Play / Pausa / Stop)")
-            print(f"  {Style.BOLD}[10]{Style.RESET} Auditar apps soportadas en la TV (DIAL App Recon)")
-            print(f"  {Style.BOLD}[11]{Style.RESET} Ficha técnica e info del dispositivo (DIAL / UPnP)")
-            print(f"  {Style.BOLD}[12]{Style.RESET} Cambiar Target / Re-escanear subred")
-            print(f"  {Style.BOLD}[13]{Style.RESET} Salir")
-            rango_op = "1-13"
+            print(f"  {Style.BOLD}[2]{Style.RESET} YouTube (Reproducir Contenido)")
+            print(f"  {Style.BOLD}[3]{Style.RESET} Netflix (Reproducir Contenido)")
+            print(f"  {Style.BOLD}[4]{Style.RESET} Consultar estado de una app (YouTube / Netflix)")
+            print(f"  {Style.BOLD}[5]{Style.RESET} Cerrar / Abortar app activa (YouTube / Netflix)")
+            print(f"  {Style.BOLD}[6]{Style.RESET} Control de Volumen (+ / - / Silencio)")
+            print(f"  {Style.BOLD}[7]{Style.RESET} Controles Multimedia (Play / Pausa / Stop)")
+            print(f"  {Style.BOLD}[8]{Style.RESET} Auditar apps soportadas en la TV (DIAL App Recon)")
+            print(f"  {Style.BOLD}[9]{Style.RESET} Ficha técnica e info del dispositivo (DIAL / UPnP)")
+            print(f"  {Style.BOLD}[10]{Style.RESET} Cambiar Target / Re-escanear subred")
+            print(f"  {Style.BOLD}[11]{Style.RESET} Salir")
+            rango_op = "1-11"
         else:
             print(f"  {Style.BOLD}[1]{Style.RESET} Encender TV")
             print(f"  {Style.BOLD}[2]{Style.RESET} YouTube (Reproducir Contenido)")
@@ -1270,36 +1242,7 @@ def menu_interactivo(remote: SmartTVRemote):
             except (KeyboardInterrupt, EOFError):
                 pass
 
-        elif remote.is_cast and opcion == "4":
-            remote.launch_app("PrimeVideo")
-            time.sleep(1.8)
-
-        elif remote.is_cast and opcion == "5":
-            print(f" {Style.BOLD}Aplicaciones disponibles:{Style.RESET}")
-            for i, (nombre, app_id) in enumerate(APPS_PREDETERMINADAS, 1):
-                print(f"  [{i}] {nombre} ({app_id})")
-            print(f"  [{len(APPS_PREDETERMINADAS) + 1}] Escribir nombre de app personalizada")
-
-            try:
-                sub_op = input(f"\n {Style.BOLD}Elige una opción: {Style.RESET}").strip()
-                if sub_op.isdigit():
-                    num = int(sub_op)
-                    if 1 <= num <= len(APPS_PREDETERMINADAS):
-                        app_elegida = APPS_PREDETERMINADAS[num - 1][1]
-                        remote.launch_app(app_elegida)
-                    elif num == len(APPS_PREDETERMINADAS) + 1:
-                        custom_app = input(f" {Style.BOLD}Ingresa el nombre de la app: {Style.RESET}").strip()
-                        if custom_app:
-                            remote.launch_app(custom_app)
-                    else:
-                        log_warn("Opción no válida.")
-                else:
-                    log_warn("Entrada inválida.")
-                time.sleep(1.8)
-            except (KeyboardInterrupt, EOFError):
-                pass
-
-        elif (remote.is_cast and opcion == "6") or (not remote.is_cast and opcion == "4"):
+        elif opcion == "4":
             try:
                 app_target = input(f" {Style.BOLD}Nombre de la app a consultar [YouTube]: {Style.RESET}").strip() or "YouTube"
                 remote.check_status(app_target)
@@ -1307,7 +1250,7 @@ def menu_interactivo(remote: SmartTVRemote):
             except (KeyboardInterrupt, EOFError):
                 pass
 
-        elif (remote.is_cast and opcion == "7") or (not remote.is_cast and opcion == "5"):
+        elif opcion == "5":
             try:
                 app_target = input(f" {Style.BOLD}Nombre de la app a cerrar [YouTube]: {Style.RESET}").strip() or "YouTube"
                 remote.stop_app(app_target)
@@ -1315,27 +1258,27 @@ def menu_interactivo(remote: SmartTVRemote):
             except (KeyboardInterrupt, EOFError):
                 pass
 
-        elif remote.is_cast and opcion == "8":
+        elif remote.is_cast and opcion == "6":
             subinterfaz_volumen(remote)
 
-        elif remote.is_cast and opcion == "9":
+        elif remote.is_cast and opcion == "7":
             subinterfaz_multimedia(remote)
 
-        elif (remote.is_cast and opcion == "10") or (not remote.is_cast and opcion == "6"):
+        elif (remote.is_cast and opcion == "8") or (not remote.is_cast and opcion == "6"):
             remote.scan_dial_apps()
             try:
                 input(f" {Style.DIM}Presiona Enter para continuar...{Style.RESET}")
             except (KeyboardInterrupt, EOFError):
                 pass
 
-        elif (remote.is_cast and opcion == "11") or (not remote.is_cast and opcion == "7"):
+        elif (remote.is_cast and opcion == "9") or (not remote.is_cast and opcion == "7"):
             remote.print_device_info()
             try:
                 input(f" {Style.DIM}Presiona Enter para continuar...{Style.RESET}")
             except (KeyboardInterrupt, EOFError):
                 pass
 
-        elif (remote.is_cast and opcion == "12") or (not remote.is_cast and opcion == "8"):
+        elif (remote.is_cast and opcion == "10") or (not remote.is_cast and opcion == "8"):
             print(f"  {Style.BOLD}[a]{Style.RESET} Escanear automáticamente en la red WiFi")
             print(f"  {Style.BOLD}[b]{Style.RESET} Escribir IP manualmente")
             sub = input(f" {Style.BOLD}Elige [a/b]: {Style.RESET}").strip().lower()
@@ -1379,7 +1322,7 @@ def menu_interactivo(remote: SmartTVRemote):
                     log_success(f"IP actualizada a {remote.ip} (Tipo: {remote.protocol_label})")
                     time.sleep(1.5)
 
-        elif (remote.is_cast and opcion == "13") or (not remote.is_cast and opcion == "9"):
+        elif (remote.is_cast and opcion == "11") or (not remote.is_cast and opcion == "9"):
             print(f"{Style.YELLOW}[!] Sesión finalizada por el operador. Desconectado.{Style.RESET}")
             sys.exit(0)
 
