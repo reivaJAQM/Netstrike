@@ -69,11 +69,28 @@ pip install -r requirements.txt
 
 ### 1. Modo Interactivo (Consola Táctica)
 
-Al ejecutar la herramienta sin argumentos, Netstrike inicia un escaneo automatico de la red, presenta la lista de pantallas detectadas y despliega un menu interactivo:
+Al ejecutar la herramienta sin argumentos, Netstrike inicia un escaneo automatico de la red, presenta la lista de pantallas detectadas y despliega un menu interactivo adaptado al protocolo del objetivo:
 
 ```bash
 python3 netstrike.py
 ```
+
+* **Dispositivos Fire TV / DIAL:**
+  * `[1]` Encender TV
+  * `[2]` YouTube (Reproducir Contenido)
+  * `[3]` Netflix (Reproducir Contenido)
+  * `[4]` Consultar estado de una app (YouTube / Netflix)
+  * `[5]` Cerrar / Abortar app activa (YouTube / Netflix)
+  * `[6]` Auditar apps soportadas en la TV (DIAL App Recon)
+  * `[7]` Ficha tecnica e info del dispositivo (DIAL / UPnP)
+  * `[8]` Cambiar Target / Re-escanear subred
+  * `[9]` Salir
+
+* **Dispositivos Google Cast / Android TV:**
+  * Opciones `[1]` a `[5]` identicas.
+  * `[6]` Control de Volumen (+ / - / Silencio).
+  * `[7]` Controles Multimedia (Play / Pausa / Stop).
+  * Opciones `[8]` a `[11]` para auditoria, ficha tecnica y seleccion de objetivo.
 
 ### 2. Modo Automatizado por Linea de Comandos (CLI)
 
@@ -92,6 +109,17 @@ Netstrike puede integrarse en scripts o ejecutarse de forma directa especificand
 * **Inyectar contenido en Netflix:**
   ```bash
   python3 netstrike.py --ip 192.168.1.50 --netflix "80057281"
+  ```
+
+* **Modificar volumen o silenciar (Cast / Smart TVs compatibles):**
+  ```bash
+  python3 netstrike.py --ip 192.168.1.50 --volume +
+  python3 netstrike.py --ip 192.168.1.50 --mute
+  ```
+
+* **Control de reproduccion multimedia:**
+  ```bash
+  python3 netstrike.py --ip 192.168.1.50 --media pause
   ```
 
 * **Auditar las aplicaciones soportadas por el televisor:**
