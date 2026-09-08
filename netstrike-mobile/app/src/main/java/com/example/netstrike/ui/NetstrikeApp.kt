@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -30,6 +31,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NetstrikeApp() {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
     var targetIp by remember { mutableStateOf("192.168.100.98") }
@@ -127,7 +129,7 @@ fun NetstrikeApp() {
                                     isBusy = true
                                     addLog("Escaneando subred local Wi-Fi...")
                                     coroutineScope.launch {
-                                        val devs = NetstrikeClient.discoverDevices()
+                                        val devs = NetstrikeClient.discoverDevices(context)
                                         discoveredDevices = devs
                                         isBusy = false
                                         if (devs.isNotEmpty()) {
@@ -400,7 +402,7 @@ fun NetstrikeApp() {
                                 CircularProgressIndicator(modifier = Modifier.size(12.dp), strokeWidth = 2.dp, color = NeonGreen)
                             }
                         }
-                        Divider(color = CyberBorder, thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
+                        HorizontalDivider(color = CyberBorder, thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
                         LazyColumn(modifier = Modifier.fillMaxSize()) {
                             items(logs) { logMsg ->
                                 val color = when {
@@ -450,7 +452,7 @@ fun NetstrikeApp() {
                                 Text("${dev.ip}:${dev.port}", color = ElectricCyan, fontSize = 12.sp, fontFamily = FontFamily.Monospace)
                             }
                         }
-                        Divider(color = CyberBorder)
+                        HorizontalDivider(color = CyberBorder)
                     }
                 }
             },

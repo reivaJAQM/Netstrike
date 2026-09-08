@@ -1,5 +1,7 @@
 package com.example.netstrike.network
 
+import android.content.Context
+import android.net.wifi.WifiManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -38,9 +40,19 @@ object NetstrikeClient {
     /**
      * Realiza un escaneo SSDP en la red local Wi-Fi para descubrir Smart TVs y Fire TVs.
      */
-    suspend fun discoverDevices(timeoutMs: Int = 2500): List<DiscoveredTarget> = withContext(Dispatchers.IO) {
+    suspend fun discoverDevices(context: Context? = null, timeoutMs: Int = 3000): List<DiscoveredTarget> = withContext(Dispatchers.IO) {
         val targets = mutableListOf<DiscoveredTarget>()
         val seenIps = mutableSetOf<String>()
+
+        var multicastLock: WifiManager.MulticastLock? = null
+        if (context != null) {
+            try {
+                val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+                multicastLock = wifiManager?.createMulticastLock("NetstrikeSSDP")
+                multicastLock?.setReferenceCounted(true)
+                multicastLock?.acquire()
+            } catch (_: Exception) {}
+        }
 
         val query = (
             "M-SEARCH * HTTP/1.1\r\n" +
@@ -101,6 +113,11 @@ object NetstrikeClient {
         } catch (_: Exception) {
         } finally {
             socket?.close()
+            try {
+                if (multicastLock?.isHeld == true) {
+                    multicastLock.release()
+                }
+            } catch (_: Exception) {}
         }
 
         targets
